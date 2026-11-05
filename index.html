@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Révisions Histoire - Crise & Totalitarismes (Complet)</title>
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-main: #1c1e21;
+            --text-muted: #606770;
+            --primary: #1877F2; /* Bleu : Économie / Crise */
+            --danger: #E41E3F; /* Rouge : Violence / Totalitarisme */
+            --success: #00A650; /* Vert : Démocratie / Solutions */
+            --warning: #F7B928; /* Jaune : Dates / Chiffres */
+            --purple: #8B5CF6; /* Violet : Géopolitique / Guerre */
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px;
+            line-height: 1.5;
+            font-size: 15px; /* Taille réduite un peu pour faire tenir plus d'infos */
+        }
+
+        /* --- EN-TÊTE --- */
+        header {
+            background-color: #242526;
+            color: white;
+            padding: 12px 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+
+        /* --- NAVIGATION BAS DE PAGE --- */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-btn {
+            background: none; border: none; font-size: 11px; color: var(--text-muted);
+            font-weight: 600; display: flex; flex-direction: column; align-items: center;
+            gap: 2px; padding: 5px; flex: 1;
+        }
+        .nav-btn .icon { font-size: 20px; }
+        .nav-btn.active { color: var(--primary); }
+
+        /* --- CONTENU --- */
+        .tab-content { display: none; padding: 15px; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title {
+            font-size: 1.1rem; font-weight: bold; margin: 20px 0 10px 0;
+            color: #242526; border-bottom: 2px solid #ddd; padding-bottom: 5px;
+        }
+
+        /* --- CARTES ACCORDÉON --- */
+        .accordion {
+            background-color: var(--bg-card); border-radius: 12px; margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;
+        }
+
+        .accordion-header {
+            background: var(--bg-card); padding: 15px; font-weight: 600;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; border-left: 6px solid #ccc; font-size: 0.95rem;
+        }
+
+        .accordion-header.bleu { border-left-color: var(--primary); }
+        .accordion-header.rouge { border-left-color: var(--danger); }
+        .accordion-header.vert { border-left-color: var(--success); }
+        .accordion-header.violet { border-left-color: var(--purple); }
+
+        .accordion-content {
+            display: none; padding: 15px; background: #fafafa;
+            border-top: 1px solid #eee; font-size: 0.9rem;
+        }
+
+        /* --- BADGES DATES/CHIFFRES --- */
+        .badge {
+            display: inline-block; background: var(--warning); color: #000;
+            font-weight: bold; padding: 1px 6px; border-radius: 4px;
+            font-size: 0.8rem; margin: 2px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .badge.rouge { background: var(--danger); color: white; }
+        .badge.bleu { background: var(--primary); color: white; }
+        .badge.violet { background: var(--purple); color: white; }
+
+        ul { padding-left: 18px; margin-top: 5px; margin-bottom: 5px; }
+        li { margin-bottom: 8px; }
+        strong { color: #000; }
+        .highlight { background-color: #fff3cd; padding: 0 2px; border-radius: 2px; font-weight: bold;}
+
+        /* --- FRISE CHRONOLOGIQUE --- */
+        .timeline {
+            position: relative; margin: 20px 0; padding-left: 20px; border-left: 3px solid var(--primary);
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 15px; background: white;
+            padding: 10px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -27px; top: 12px;
+            width: 10px; height: 10px; border-radius: 50%; background: var(--primary);
+            border: 2px solid white; box-shadow: 0 0 0 2px var(--primary);
+        }
+        .timeline-item.rouge::before { background: var(--danger); box-shadow: 0 0 0 2px var(--danger); }
+        .timeline-item.vert::before { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+        .timeline-item.violet::before { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+        
+        .timeline-date { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 3px; }
+        .timeline-item.rouge .timeline-date { color: var(--danger); }
+        .timeline-item.vert .timeline-date { color: var(--success); }
+        .timeline-item.violet .timeline-date { color: var(--purple); }
+
+        /* --- RQP --- */
+        .rqp-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .rqp-question { font-weight: bold; font-size: 1rem; color: var(--primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px dashed #eee; }
+        .btn-reveal {
+            width: 100%; padding: 12px; background-color: #f0f2f5; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 0.9rem; font-weight: bold; color: var(--text-main);
+            margin-bottom: 8px; text-align: left;
+        }
+        .btn-reveal:active { background-color: #e4e6eb; }
+        .reveal-content { display: none; background-color: #fafafa; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--primary); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Histoire : Crise & Totalitarismes</h1>
+    </header>
+
+    <!-- ================= TAB 1 : CHRONO ================= -->
+    <section id="tab-chrono" class="tab-content active">
+        <h2 class="section-title">Frise Chronologique Détaillée</h2>
+        <div class="timeline">
+            <div class="timeline-item rouge">
+                <div class="timeline-date">1917 - 1927</div>
+                <strong>URSS :</strong> Révolution bolchevique (1917), création URSS (1922). Mort de Lénine (1924). Staline évince les trotskystes (1927) et prend le pouvoir absolu.
+            </div>
+            <div class="timeline-item rouge">
+                <div class="timeline-date">1922</div>
+                <strong>Italie :</strong> Marche sur Rome (26 000 fascistes). Mussolini nommé président du Conseil par le roi.
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">1926 - 1929</div>
+                <strong>USA :</strong> Bulle spéculative. Les cours de bourse sont multipliés par 6 sans lien avec la valeur réelle.
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">24 & 29 Oct. 1929</div>
+                <strong>USA :</strong> Krach de Wall Street. Jeudi noir (12M d'actions) et Mardi noir (16M d'actions). Début de la dépression.
+            </div>
+            <div class="timeline-item rouge">
+                <div class="timeline-date">30 Janvier 1933</div>
+                <strong>Allemagne :</strong> Hitler nommé chancelier par Hindenburg.
+            </div>
+            <div class="timeline-item vert">
+                <div class="timeline-date">1933 - 1938</div>
+                <strong>USA :</strong> New Deal de Roosevelt (élu en 1932). 1er New Deal (1933-34 : urgence), 2e New Deal (1935-38 : réformes sociales).
+            </div>
+            <div class="timeline-item rouge">
+                <div class="timeline-date">1934</div>
+                <strong>Allemagne :</strong> Nuit des Longs Couteaux (29-30 juin). Hitler élimine les chefs SA. <br><strong>URSS :</strong> Début de la Grande Terreur (jusqu'en 1938).
+            </div>
+            <div class="timeline-item vert">
+                <div class="timeline-date">Juin 1936</div>
+                <strong>France :</strong> Accords Matignon (7-8 juin). Lois sociales (40h, congés payés).
+            </div>
+            <div class="timeline-item violet">
+                <div class="timeline-date">1936 - 1939</div>
+                <strong>Géopolitique :</strong> Remilitarisation de la Rhénanie (mars 36), Axe Berlin-Rome (oct 36), Pacte anti-Komintern (nov 36). Guerre d'Espagne.
+            </div>
+            <div class="timeline-item rouge">
+                <div class="timeline-date">1937 - 1938</div>
+                <strong>Brésil :</strong> Vargas instaure l'Estado Novo (1937). <br><strong>Allemagne :</strong> Nuit de Cristal (9-10 nov 1938).
+            </div>
+            <div class="timeline-item violet">
+                <div class="timeline-date">1938 - 1939</div>
+                <strong>Géopolitique :</strong> Anschluss (mars 38), Conférence de Munich (sept 38), Pacte d'acier (mai 39), Pacte germano-soviétique (23 août 39). Invasion de la Pologne (1er sept 39).
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TAB 2 : CHAPITRE 1 (CRISE) ================= -->
+    <section id="tab-chap1" class="tab-content">
+        <h2 class="section-title">I. La Crise de 1929</h2>
+
+        <div class="accordion">
+            <div class="accordion-header bleu" onclick="toggleAccordion(this)">
+                <span>📉 Les causes structurelles</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Surproduction :</strong> L'agriculture (mécanisation, surendettement) et l'industrie de masse (automobile, électroménager) produisent plus que la demande.</li>
+                    <li><strong>Spéculation :</strong> Entre <span class="badge">1926-1929</span>, le cours des actions est multiplié par <strong>6</strong>, sans rapport avec la valeur réelle. Achat à crédit massif.</li>
+                    <li><strong>Fragilité bancaire :</strong> Le système dépend du crédit à court terme, peu contrôlé. 6 grandes banques ont prêté <strong>24 milliards de dollars</strong> pour la spéculation.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header bleu" onclick="toggleAccordion(this)">
+                <span>📉 Le Krach et la dépression économique</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><span class="badge">24 Oct. 1929</span> <strong>Jeudi noir :</strong> 12 millions d'actions vendues sans acheteur.</li>
+                    <li><span class="badge">29 Oct. 1929</span> <strong>Mardi noir :</strong> 16 millions d'actions vendues. Effondrement des cours.</li>
+                    <li><strong>Faillites en cascade :</strong> Les banques ne prêtent plus, le crédit s'effondre.</li>
+                    <li><span class="badge">1929-1933</span> PIB US <strong>-30%</strong>, production industrielle <strong>-45%</strong>, exportations mondiales <strong>-25%</strong>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header bleu" onclick="toggleAccordion(this)">
+                <span>📉 La crise sociale mondiale</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Chômage :</strong> En 1933, <strong>25%</strong> des Américains (13 millions) sont sans emploi. En Allemagne, 6 millions.</li>
+                    <li><strong>Salaires :</strong> Baisse d'environ <strong>40%</strong> aux USA, réduisant la consommation (cercle vicieux).</li>
+                    <li><strong>Misère :</strong> Création de <em>Hoovervilles</em> (bidonvilles), manifestations de chômeurs à New York (1930), marches de la faim au Royaume-Uni (1932).</li>
+                    <li><strong>Agriculture :</strong> Le <em>Dust Bowl</em> (sécheresse) ruine les fermiers, exode rural massif.</li>
+                    <li><strong>Amérique Latine :</strong> Très dépendante des exportations (chute de <strong>50%</strong> entre 1929 et 1932). Troubles politiques.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header vert" onclick="toggleAccordion(this)">
+                <span>🛠️ Réponse USA : Le New Deal</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <p>Roosevelt (élu <span class="badge">1932</span>), inspiré par Keynes :</p>
+                <ul>
+                    <li><strong>1er New Deal (1933-34) :</strong> Urgence. Réorganisation bancaire (séparation dépôt/affaires), création d'agences (SEC), grands travaux (TVA, PWA).</li>
+                    <li><strong>2e New Deal (1935-38) :</strong> Lois sur les salaires, droit syndical, <em>Social Security Act</em> (<span class="badge">1935</span>) instaurant les assurances sociales.</li>
+                    <li><strong>Bilan :</strong> Reprise partielle, mais <strong>9 millions</strong> de chômeurs subsistent en 1939.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header vert" onclick="toggleAccordion(this)">
+                <span>🛠️ Réponse France : Le Front Populaire</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <p>Léon Blum (SFIO, radicaux, PC), élections <span class="badge">avril-mai 1936</span> :</p>
+                <ul>
+                    <li><strong>Accords Matignon :</strong> <span class="badge">7-8 Juin 1936</span>. Hausse des salaires de <strong>7 à 15%</strong>, liberté syndicale.</li>
+                    <li><strong>Lois sociales :</strong> 2 semaines de congés payés, semaine de <strong>40 heures</strong>.</li>
+                    <li><strong>Économie :</strong> Nationalisation (chemins de fer, armement, aéronautique), réforme de la Banque de France.</li>
+                    <li><strong>Limites :</strong> Opposition du patronat, démission de Blum en 1937.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header vert" onclick="toggleAccordion(this)">
+                <span>🛠️ Autres réponses : Amérique Latine</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Brésil :</strong> Getúlio Vargas instaure l'<em>Estado Novo</em> en <span class="badge">1937</span> (dictature nationaliste). Développement autocentré, industrialisation planifiée.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TAB 3 : CHAPITRE 2 (TOTALITARISMES) ================= -->
+    <section id="tab-chap2" class="tab-content">
+        <h2 class="section-title">II. Les Régimes Totalitaires</h2>
+
+        <div class="accordion">
+            <div class="accordion-header rouge" onclick="toggleAccordion(this)">
+                <span>⚠️ Définition (Raymond Aron) et les 5 piliers</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Parti unique</strong> dirigé par un chef charismatique (culte de la personnalité).</li>
+                    <li><strong>Idéologie d'État</strong> promettant la création d'un "homme nouveau".</li>
+                    <li><strong>Police politique et Terreur</strong> (ne se limitant pas aux opposants).</li>
+                    <li><strong>Monopole des médias</strong> (propagande, censure).</li>
+                    <li><strong>Dirigisme économique</strong> visant l'autarcie, menant au militarisme et à la conquête.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header rouge" onclick="toggleAccordion(this)">
+                <span>☭ L'URSS de Staline (1922-1953)</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Idéologie :</strong> Marxisme-léninisme (communisme internationaliste, dictature du prolétariat). Homme nouveau = travailleur (ouvrier, kolkhozien).</li>
+                    <li><strong>Économie :</strong> Collectivisation (élimination des <em>Koulaks</em>, création de <em>Kolkhozes</em>), nationalisation de l'industrie (1929).</li>
+                    <li><strong>Société :</strong> Embrigadement (Komsomol), propagande (Stakhanovisme). Culte du "Vojd".</li>
+                    <li><strong>Terreur :</strong> Police politique (Guépéou, puis <strong>NKVD</strong>). Purges (Trotskystes 1927). Grande Terreur (1936-38). Camps de travail (Goulags). Famine organisée en Ukraine (1932-33).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header rouge" onclick="toggleAccordion(this)">
+                <span>🪖 L'Allemagne nazie (1933-1945)</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Idéologie :</strong> Nazisme (nationaliste, raciste, antisémite, anticommuniste, "Espace vital" - Lebensraum). Homme nouveau = aryen (blond, militaire).</li>
+                    <li><strong>Politique :</strong> NSDAP unique (1933). Lois de Nuremberg (<span class="badge">15/09/1935</span>) retirent la citoyenneté aux Juifs. Nuit de Cristal (<span class="badge">9-10 Nov. 1938</span>).</li>
+                    <li><strong>Économie :</strong> Élimination des Juifs de l'économie (1938), militarisation pour préparer la conquête.</li>
+                    <li><strong>Terreur :</strong> Gestapo (créée 1933 par Göring, développée par Himmler). SA (créées 1921, purgées en 1934). Camps de concentration.</li>
+                    <li><strong>Société :</strong> Jeunesses hitlériennes (sport, endoctrinement, pas d'éducation critique). JO de Berlin (1936).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header rouge" onclick="toggleAccordion(this)">
+                <span>🦅 L'Italie fasciste (1922-1945)</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Idéologie :</strong> Fascisme (nationaliste, État au centre). Homme nouveau = homme fort, discipliné au service de la patrie.</li>
+                    <li><strong>Politique :</strong> Parti national fasciste unique (1925). Lois fascistissimes (1925-26).</li>
+                    <li><strong>Terreur :</strong> Squadristes (Chemises noires, milice). Police politique <strong>OVRA</strong> (1927).</li>
+                    <li><strong>Société :</strong> Embrigadement (Balillas), culte du Duce. Opera Nazionale Dopolavoro (loisirs).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header rouge" onclick="toggleAccordion(this)">
+                <span>🩸 La violence d'État et les Polices Politiques</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>Milices :</strong> Squadristes (Italie), SA (Allemagne).</li>
+                    <li><strong>Polices :</strong> OVRA (Italie), Gestapo (All), NKVD (URSS).</li>
+                    <li><strong>Purges internes :</strong> Nuit des Longs Couteaux (<span class="badge">29-30 Juin 1934</span>, 85 SA assassinés par les SS).</li>
+                    <li><strong>Violences de masse :</strong> Grande Terreur (URSS), Massacre de Graziani (Italie en Éthiopie, 1937), Famine en Ukraine (1932-33).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TAB 4 : GÉOPOLITIQUE ================= -->
+    <section id="tab-geo" class="tab-content">
+        <h2 class="section-title">III. Géopolitique et marche à la guerre</h2>
+
+        <div class="accordion">
+            <div class="accordion-header violet" onclick="toggleAccordion(this)">
+                <span>🌍 La SDN et l'impuissance des démocraties</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><strong>SDN discréditée :</strong> Ne peut rien faire face au coup de force de l'Allemagne en 1936, ni face à la conquête de l'Éthiopie par l'Italie en 1938 (aucune sanction économique).</li>
+                    <li><strong>Pacifisme :</strong> La France et le Royaume-Uni veulent éviter la guerre à tout prix ("Plus jamais ça").</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header violet" onclick="toggleAccordion(this)">
+                <span>💥 Les coups de force d'Hitler (1936-1938)</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><span class="badge">7 Mars 1936</span> <strong>Remilitarisation de la Rhénanie</strong> (violation du Traité de Versailles).</li>
+                    <li><span class="badge">Oct. 1936</span> <strong>Axe Berlin-Rome</strong> (Mussolini) et Pacte Anti-Komintern (Japon, puis Italie).</li>
+                    <li><span class="badge">12 Mars 1938</span> <strong>Anschluss</strong> : rattachement de l'Autriche à l'Allemagne. Plébiscite truqué à 99,75%.</li>
+                    <li><span class="badge">Sept. 1938</span> <strong>Conférence de Munich :</strong> Hitler (All), Mussolini (It), Daladier (Fr) et Chamberlain (RU). Hitler obtient les Sudètes (Tchécoslovaquie). Illusion de paix pour la Fr et le RU, l'URSS est tenue à l'écart.</li>
+                    <li><span class="badge">Mars 1939</span> Fin de la Tchécoslovaquie (coup de force).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header violet" onclick="toggleAccordion(this)">
+                <span>🤝 Le Pacte germano-soviétique et la guerre</span><span>▼</span>
+            </div>
+            <div class="accordion-content">
+                <ul>
+                    <li><span class="badge">23 Août 1939</span> <strong>Pacte germano-soviétique</strong> (Ribbentrop-Molotov). Non-agression de 10 ans avec accords secrets de partage de la Pologne.</li>
+                    <li><span class="badge">22 Mai 1939</span> <strong>Pacte d'Acier</strong> (Allemagne-Italie).</li>
+                    <li><span class="badge">1er Sept. 1939</span> <strong>Invasion de la Pologne</strong> par l'Allemagne.</li>
+                    <li><span class="badge">3 Sept. 1939</span> France et Royaume-Uni déclarent la guerre à l'Allemagne. Début de la 2nde Guerre mondiale.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TAB 5 : RQP ================= -->
+    <section id="tab-rqp" class="tab-content">
+        <h2 class="section-title">Entraînement RQP</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Méthode : Réfléchis à la réponse avant de cliquer.</p>
+
+        <!-- SUJET MIXTE -->
+        <div class="rqp-card" id="rqp1">
+            <div class="rqp-question">Sujet 1 (Mixte) : Comment la crise de 1929 fragilise-t-elle les démocraties et favorise-t-elle l'émergence de modèles alternatifs ?</div>
+            
+            <button class="btn-reveal" onclick="revealStep('rqp1', 1)">👉 1. Introduction</button>
+            <div id="rqp1-step1" class="reveal-content">
+                <p><em>Intro :</em> Au sortir de la Première Guerre mondiale, les années 1920 sont marquées par le libéralisme et l'insouciance. Cependant, le krach boursier de Wall Street en octobre 1929 précipite le monde dans une grave crise économique et sociale. Les démocraties libérales, dépassées, perdent la confiance de leurs populations. Comment cette crise déstabilise-t-elle les régimes démocratiques et permet-elle l'émergence de modèles totalitaires ? Après avoir analysé les mécanismes de la crise, nous étudierons les réponses démocratiques (New Deal, Front Populaire), avant de voir comment les régimes totalitaires s'imposent comme une alternative.</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp1', 2)">👉 2. Grandes Parties</button>
+            <div id="rqp1-step2" class="reveal-content">
+                <p><strong>I.</strong> Une crise économique et sociale mondiale sans précédent</p>
+                <p><strong>II.</strong> Des démocraties fragilisées qui tentent de réagir</p>
+                <p><strong>III.</strong> L'émergence de modèles totalitaires comme alternative</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp1', 3)">👉 3. Sous-Parties</button>
+            <div id="rqp1-step3" class="reveal-content">
+                <p><strong>I.</strong> Une crise...</p>
+                <p style="margin-left:15px;">A. Le krach boursier de 1929 et la dépression</p>
+                <p style="margin-left:15px;">B. Le chômage de masse et la misère sociale</p>
+                <p><strong>II.</strong> Des démocraties...</p>
+                <p style="margin-left:15px;">A. L'interventionnisme de l'État : New Deal et Front Populaire</p>
+                <p style="margin-left:15px;">B. Des résultats mitigés qui laissent le doute</p>
+                <p><strong>III.</strong> L'émergence...</p>
+                <p style="margin-left:15px;">A. La montée du nazisme en Allemagne (1933)</p>
+                <p style="margin-left:15px;">B. Des réponses par la terreur et l'embrigadement (URSS, Italie, Allemagne)</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp1', 4)">👉 4. Plan Détaillé & Conclusion</button>
+            <div id="rqp1-step4" class="reveal-content">
+                <p><strong>I.A.</strong> Jeudi noir (24 oct) et Mardi noir (29 oct 1929). Faillites bancaires (24 milliards de $ prêtés). PIB US -30%.</p>
+                <p><strong>I.B.</strong> 13M de chômeurs aux USA, 6M en Allemagne. Hoovervilles. Salaires -40%. Amérique Latine : exportations -50%.</p>
+                <p><strong>II.A.</strong> Roosevelt (1933) : TVA, PWA, Social Security Act. Blum (1936) : Accords Matignon (salaires +7 à 15%), 40h, congés payés.</p>
+                <p><strong>II.B.</strong> USA : encore 9M de chômeurs en 1939. France : chute de Blum en 1937. Les démocraties semblent impuissantes.</p>
+                <p><strong>III.A.</strong> Hitler nommé chancelier (30 janv. 1933). Le NSDAP passe de 2% à 37%. Fin de la République de Weimar.</p>
+                <p><strong>III.B.</strong> Staline (URSS, Kolkhozes, NKVD), Mussolini (Italie, OVRA), Hitler (Gestapo, Lois de Nuremberg 1935). Propagande, culte du chef, purges (Nuit des Longs Couteaux).</p>
+                <hr style="border:0; border-top: 1px solid #ddd; margin: 10px 0;">
+                <p><em>Conclusion :</em> La crise de 1929 a été un catalyseur. Elle a prouvé la faiblesse des démocraties libérales à résoudre la misère. Cette perte de confiance a poussé les populations vers des régimes autoritaires promettant de l'ordre et de la force, préparant ainsi le terrain vers la Seconde Guerre mondiale.</p>
+            </div>
+        </div>
+
+        <!-- SUJET UNIQUE -->
+        <div class="rqp-card" id="rqp2" style="margin-top: 30px;">
+            <div class="rqp-question">Sujet 2 (Spécifique) : Les régimes totalitaires : des États en guerre contre leurs propres sociétés ?</div>
+            
+            <button class="btn-reveal" onclick="revealStep('rqp2', 1)">👉 1. Introduction</button>
+            <div id="rqp2-step1" class="reveal-content">
+                <p><em>Intro :</em> Après la Première Guerre mondiale, la fragilité des jeunes démocraties permet l'émergence de régimes totalitaires en URSS, en Italie et en Allemagne. Ces régimes cherchent à contrôler l'intégralité de la société et de la vie privée. Comment ces États totalitaires parviennent-ils à soumettre leurs sociétés ? Nous verrons qu'ils imposent une idéologie par l'embrigadement, qu'ils utilisent la violence d'État, et qu'ils transforment cette violence en une politique d'expansion géopolitique.</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp2', 2)">👉 2. Grandes Parties</button>
+            <div id="rqp2-step2" class="reveal-content">
+                <p><strong>I.</strong> Un contrôle total de la société par l'idéologie et l'embrigadement</p>
+                <p><strong>II.</strong> La violence et la terreur comme instruments de soumission</p>
+                <p><strong>III.</strong> Une géopolitique agressive menaçant la paix mondiale</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp2', 3)">👉 3. Sous-Parties</button>
+            <div id="rqp2-step3" class="reveal-content">
+                <p><strong>I.</strong> Un contrôle...</p>
+                <p style="margin-left:15px;">A. Une idéologie officielle et un homme nouveau</p>
+                <p style="margin-left:15px;">B. L'embrigadement de la jeunesse et des loisirs</p>
+                <p><strong>II.</strong> La violence...</p>
+                <p style="margin-left:15px;">A. La police politique et les purges</p>
+                <p style="margin-left:15px;">B. La terreur de masse (camps, génocides)</p>
+                <p><strong>III.</strong> Une géopolitique...</p>
+                <p style="margin-left:15px;">A. L'autarcie et l'espace vital (Lebensraum)</p>
+                <p style="margin-left:15px;">B. Les coups de force et la marche à la guerre</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealStep('rqp2', 4)">👉 4. Plan Détaillé & Conclusion</button>
+            <div id="rqp2-step4" class="reveal-content">
+                <p><strong>I.A.</strong> Nazisme (race aryenne), Fascisme (État tout puissant), Communisme (lutte des classes). Lois de Nuremberg (1935), Lois fascistissimes (1925).</p>
+                <p><strong>I.B.</strong> Jeunesses hitlériennes, Komsomol (URSS), Balillas (Italie). JO de Berlin (1936).</p>
+                <p><strong>II.A.</strong> Gestapo (All, 1933), OVRA (Italie, 1927), NKVD (URSS). Purges (Nuit des Longs Couteaux, 1934).</p>
+                <p><strong>II.B.</strong> Nuit de Cristal (1938). Grande Terreur (URSS, 1936-38). Goulags, famine en Ukraine (1932-33).</p>
+                <p><strong>III.A.</strong> Le Lebensraum d'Hitler justifie la conquête de l'Est. L'Italie envahit l'Éthiopie (1935-36).</p>
+                <p><strong>III.B.</strong> Remilitarisation de la Rhénanie (1936), Anschluss (1938), Munich (1938), Pacte germano-soviétique (1939). Invasion de la Pologne (1er sept 1939).</p>
+                <hr style="border:0; border-top: 1px solid #ddd; margin: 10px 0;">
+                <p><em>Conclusion :</em> Les régimes totalitaires sont bien des États en guerre contre leurs propres sociétés, utilisant l'embrigadement et la terreur. Mais cette violence interne s'exporte : l'idéologie impérialiste (espace vital, Empire) conduit inévitablement à un conflit mondial, déclenché par l'invasion de la Pologne en septembre 1939.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- BARRE DE NAVIGATION (5 boutons) --- -->
+    <nav class="nav-bar">
+        <button class="nav-btn active" onclick="switchTab('chrono', this)">
+            <span class="icon">📅</span> Chrono
+        </button>
+        <button class="nav-btn" onclick="switchTab('chap1', this)">
+            <span class="icon">📉</span> Crise
+        </button>
+        <button class="nav-btn" onclick="switchTab('chap2', this)">
+            <span class="icon">⚠️</span> Totalitarismes
+        </button>
+        <button class="nav-btn" onclick="switchTab('geo', this)">
+            <span class="icon">🌍</span> Géopolitique
+        </button>
+        <button class="nav-btn" onclick="switchTab('rqp', this)">
+            <span class="icon">🧠</span> RQP
+        </button>
+    </nav>
+
+    <!-- --- SCRIPT JS --- -->
+    <script>
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleAccordion(header) {
+            let content = header.nextElementSibling;
+            let icon = header.querySelector('span:last-child');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.textContent = "▼";
+            } else {
+                content.style.display = "block";
+                icon.textContent = "▲";
+            }
+        }
+
+        function revealStep(containerId, step) {
+            const contentToShow = document.getElementById(containerId + '-step' + step);
+            if (contentToShow.style.display === 'block') {
+                contentToShow.style.display = 'none'; 
+            } else {
+                contentToShow.style.display = 'block';
+                contentToShow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    </script>
+</body>
+</html>
